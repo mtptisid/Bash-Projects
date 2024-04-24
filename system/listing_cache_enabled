@@ -1,0 +1,118 @@
+#!/bin/bash
+###########################################################################
+######## Script to genrate list of cache enabled on RHEL 7 servers       ##
+######## Created By    : MATHAPATI Siddharamayya                         ##
+######## Creation Date : 3rd April 2024                                  ##
+######## Email         : msidrm455@gmail.com                             ##
+######## Version       : 1.0                                             ##
+###########################################################################
+
+
+FSUF="$(id -u)_$$"
+
+SCRDIR=/home/RUN_TEAM/YYZ2021/scripts/INPUTFILES
+touch $SCRDIR/my_input_$FSUF
+FILE=$SCRDIR/my_input_$FSUF
+vi $FILE
+
+if [ -s $FILE ];then
+        echo " using the $FILE as input for the script"
+else
+        echo "The $FILE has no values"
+        echo ""
+        echo "Please paste your data to the  file once you run a Script."
+        exit 1
+
+fi
+
+
+SENDER=root@$(uname -n).ec2.amazon.com
+EXECUTER=$(getent passwd `whoami`| awk -F: '{print $5}')
+RECEIVER="$(getent passwd `whoami`| awk -F: '{print $5}'|awk '{up=""; low=""; for(i=1;i<=NF;i++) {gsub(/[^A-Za-z]/, "", $i); if (toupper($i) == $i) up = up $i; else low = low $i;} print up ":" low }'|awk -F: '{print tolower($0)}'| awk -F: '{OFS="."; print $2, $1}')-@gmail.com"
+
+CHARACTERCOUNT=${#RECEIVER}
+if [ $CHARACTERCOUNT -lt 30 ]; then
+        RECEIVER=""
+        read -p "Enter your Email Address:" NEWEMAIL
+        RECEIVER=$NEWEMAIL
+else
+        echo "mail will be sent to $RECEIVER"
+fi
+
+
+read -p "Do you wanna receive a output in mail[Yes/No}:" MAILCONF
+if [[ "${MAILCONF}" =~ ^[Yy] ]];then
+        read -p "Do you wanna print the output on screen as well [Yes/No}:" PRINTCONF
+fi
+
+output_file=$SCRDIR/my_output_$FSUF
+mailto_file=$SCRDIR/CACHE_LIST$FSUF.csv
+>$output_file
+>$mailto_file
+
+echo -e "SERVER,passwd cache, group cache, hosts cache ,  services cache, netgroup cache" >> $mailto_file
+echo -e " SERVER, passwd cache, group cache, hosts cache ,  services cache, netgroup cache" >> $output_file
+
+
+function checklastpatch {
+                cachelist=`ssh -o StrictHostKeyChecking=no -o ConnectTimeout=2 -o BatchMode=yes -p $PORT -l sysadm $server sudo /usr/sbin/nscd -g | grep "cache is enabled" | awk '{print $1}'| tr '\n' ' '`
+
+                read pch gch hch sch nch <<< $(echo $cachelist)
+                echo "$server, $pch , $gch , $hch , $sch , $nch" >> $output_file
+                echo "$server,$pch , $gch , $hch , $sch , $nch" >> $mailto_file
+
+
+}
+
+
+
+
+for server in `cat $FILE`;do
+        ssh -n -o ConnectTimeout=4 -o BatchMode=yes -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -p 77 -l sysadm $server sudo uptime > /dev/null 2>&1
+        if [ $? = 0 ] ; then
+                PORT=77
+                checklastpatch
+                else
+                       ssh -n -o ConnectTimeout=4 -o BatchMode=yes -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -p 22 -l sysadm $server sudo uptime > /dev/null 2>&1
+                       if [ $? = 0 ];then
+                       PORT=22
+                       checklastpatch
+                        else
+                                #echo -e "==================================The \033[41;30m $server \033[40;37m is not accessible====================="
+                                echo -e "$server" >> $SCRDIR/errorlogs_$FSUF.txt
+                                echo "$server,,,,,Connection KO" >> $mailto_file
+                     fi
+        fi
+done > /dev/null 2>&1
+
+
+
+
+
+
+echo ""
+if [[ "${MAILCONF}" =~ ^[Yy] ]];then
+        echo -e "\n\n--------------------------------------------------------------- \n find the attchment"|mailx -a $mailto_file -r $SENDER -c "msidrm455@gmail.com" -s " $0 output file for $DATE" $RECEIVER > /dev/null 2>&1
+        echo ""
+        if [[ "${PRINTCONF}" =~ ^[Yy] ]];then
+                column -t -s ',' -o '|' < $output_file
+        fi
+        echo ""
+        echo -e "                You have received mail from \033[36m $SENDER\033[0m  on \033[32m $RECEIVER \033[0m "
+        echo ""
+        echo -e "                                                \033[4;35m The script is finished for all the servers \033[0m"
+else
+        column -t -s ',' -o '|' < $output_file
+fi
+echo ""
+if [ -s "$SCRDIR/errorlogs_$FSUF.txt" ];then
+        echo "---------------------------------------------"
+        cat $SCRDIR/errorlogs_$FSUF.txt
+        echo -e "\nThese above servers were not accessible"
+        echo ""
+else
+        echo ""
+fi
+rm -rf $SCRDIR/errorlogs_$FSUF.txt
+
+
