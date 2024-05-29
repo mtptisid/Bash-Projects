@@ -29,7 +29,7 @@ tput clear
 >USES_LOCK_OUTPUT.csv
 
 #defining the sender and receiver for mail service
-SENDER=root@$(uname -n).prodinfo.gca
+SENDER=root@$(uname -n).example.com
 EXECUTER=$(getent passwd `whoami`| awk -F: '{print $5}')
 RECEIVER="$(getent passwd `whoami`| awk -F: '{print $5}'|awk '{up=""; low=""; for(i=1;i<=NF;i++) {gsub(/[^A-Za-z]/, "", $i); if (toupper($i) == $i) up = up $i; else low = low $i;} print up ":" low }'|awk -F: '{print tolower($0)}'| awk -F: '{OFS="."; print $2, $1}')-@gmail.com"
 
