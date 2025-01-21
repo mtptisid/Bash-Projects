@@ -10,7 +10,7 @@
 #set -x
 #  creating a directory to save output files
 
-SCRDIR=/home/RUN_TEAM/YYZ2021/scripts
+SCRDIR=/home/myuser/scripts
 touch $SCRDIR/INPUTFILES/my_input_$(id -u)
 FILE=$SCRDIR/INPUTFILES/my_input_$(id -u)
 vi $FILE
