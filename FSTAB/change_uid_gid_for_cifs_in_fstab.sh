@@ -21,7 +21,7 @@ GREEN='\e[32m'
 RESET='\e[0m'
 
 
-SCRDIR=/home/RUN_TEAM/YYZ2021/scripts
+SCRDIR=/home/myuser/scripts
 touch $SCRDIR/INPUTFILES/my_input_$FSUF
 FILE=$SCRDIR/INPUTFILES/my_input_$FSUF
 vi $FILE
