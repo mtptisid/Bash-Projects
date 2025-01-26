@@ -214,3 +214,83 @@ BEGIN {
     }
 }
 ' "$1"
+------------------------------------------------------------------------
+#!/bin/bash
+
+# Define ANSI color codes
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+SKYBLUE='\033[1;36m'
+ORANGE='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Main logic
+awk -v yellow="$YELLOW" -v green="$GREEN" -v red="$RED" -v skyblue="$SKYBLUE" -v orange="$ORANGE" -v nc="$NC" '
+BEGIN {
+    in_green_block = 0;
+    in_red_block = 0;
+    in_play_recap = 0;
+}
+{
+    # Handle TASK and PLAY lines
+    if ($0 ~ /^TASK/ || $0 ~ /^PLAY/) {
+        print yellow $0 nc;
+    }
+    # Handle "ok" lines
+    else if ($0 ~ /^ok/ && $0 ~ /{$/) {
+        print green $0 nc;
+        in_green_block = 1;
+    } else if ($0 ~ /^ok/) {
+        print green $0 nc;
+    }
+    # Handle "fatal" lines
+    else if ($0 ~ /^fatal/ && $0 ~ /{$/) {
+        print red $0 nc;
+        in_red_block = 1;
+    } else if ($0 ~ /^fatal/) {
+        print red $0 nc;
+    }
+    # Handle "skipping" lines
+    else if ($0 ~ /^skipping/) {
+        print skyblue $0 nc;
+    }
+    # Handle "changed" lines
+    else if ($0 ~ /^changed/) {
+        print orange $0 nc;
+    }
+    # Handle PLAY RECAP section
+    else if ($0 ~ /^PLAY RECAP/) {
+        print yellow $0 nc;
+        in_play_recap = 1;
+    }
+    # Handle lines within PLAY RECAP section
+    else if (in_play_recap && NF > 0) {
+        color = green;  # default color
+        
+        if ($0 ~ /changed=[1-9]/) color = orange;
+        if ($0 ~ /failed=[1-9]/ || $0 ~ /unreachable=[1-9]/) color = red;
+        if ($0 ~ /skipped=[1-9]/) color = skyblue;
+        
+        print color $0 nc;
+    }
+    # Handle green block (inside "ok" block)
+    else if (in_green_block) {
+        print green $0 nc;
+        if ($0 ~ /}$/) {
+            in_green_block = 0;
+        }
+    }
+    # Handle red block (inside "fatal" block)
+    else if (in_red_block) {
+        print red $0 nc;
+        if ($0 ~ /}$/) {
+            in_red_block = 0;
+        }
+    }
+    # Default case (print as-is)
+    else {
+        print $0;
+    }
+}
+' "$1"
