@@ -76,3 +76,17 @@ BEGIN {
     }
 }
 ' "$1"
+
+
+
+
+
+
+PLAY RECAP *********************************************************************
+MYSERVER8579               : ok=28   changed=9    unreachable=0    failed=0    skipped=19   rescued=0    ignored=0
+MYSERVER8610               : ok=28   changed=9    unreachable=0    failed=0    skipped=19   rescued=0    ignored=0
+MYSERVER8630               : ok=14   changed=3    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
+MYSERVER8502               : ok=28   changed=9    unreachable=0    failed=0    skipped=19   rescued=0    ignored=0
+MYSERVER8503               : ok=28   changed=9    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+MYSERVER8532               : ok=14   changed=3    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
+localhost                  : ok=5    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
