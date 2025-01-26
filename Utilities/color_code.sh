@@ -111,23 +111,34 @@ BEGIN {
     in_play_recap = 0;
 }
 {
+    # Handle TASK and PLAY lines
     if ($0 ~ /^TASK/ || $0 ~ /^PLAY/) {
         print yellow $0 nc;
-    } else if ($0 ~ /^ok/ && $0 ~ /{$/) {
+    }
+    # Handle "ok" lines
+    else if ($0 ~ /^ok/ && $0 ~ /{$/) {
         print green $0 nc;
         in_green_block = 1;
     } else if ($0 ~ /^ok/) {
         print green $0 nc;
-    } else if ($0 ~ /^fatal/ && $0 ~ /{$/) {
+    }
+    # Handle "fatal" lines
+    else if ($0 ~ /^fatal/ && $0 ~ /{$/) {
         print red $0 nc;
         in_red_block = 1;
     } else if ($0 ~ /^fatal/) {
         print red $0 nc;
-    } else if ($0 ~ /^skipping/) {
+    }
+    # Handle "skipping" lines
+    else if ($0 ~ /^skipping/) {
         print skyblue $0 nc;
-    } else if ($0 ~ /^changed/) {
+    }
+    # Handle "changed" lines
+    else if ($0 ~ /^changed/) {
         print orange $0 nc;
-    } else if ($0 ~ /^PLAY RECAP/) {
+    }
+    # Handle PLAY RECAP section
+    else if ($0 ~ /^PLAY RECAP/) {
         print yellow $0 nc;
         in_play_recap = 1;
     } else if (in_play_recap) {
@@ -142,25 +153,25 @@ BEGIN {
 
         # Extract counts from the line
         if (match($0, /ok=[0-9]+/)) {
-            ok_count = substr($0, RSTART+3, RLENGTH-3);
+            ok_count = substr($0, RSTART+3, RLENGTH-3) + 0;
         }
         if (match($0, /changed=[0-9]+/)) {
-            changed_count = substr($0, RSTART+8, RLENGTH-8);
+            changed_count = substr($0, RSTART+8, RLENGTH-8) + 0;
         }
         if (match($0, /unreachable=[0-9]+/)) {
-            unreachable_count = substr($0, RSTART+12, RLENGTH-12);
+            unreachable_count = substr($0, RSTART+12, RLENGTH-12) + 0;
         }
         if (match($0, /failed=[0-9]+/)) {
-            failed_count = substr($0, RSTART+7, RLENGTH-7);
+            failed_count = substr($0, RSTART+7, RLENGTH-7) + 0;
         }
         if (match($0, /skipped=[0-9]+/)) {
-            skipped_count = substr($0, RSTART+8, RLENGTH-8);
+            skipped_count = substr($0, RSTART+8, RLENGTH-8) + 0;
         }
         if (match($0, /rescued=[0-9]+/)) {
-            rescued_count = substr($0, RSTART+8, RLENGTH-8);
+            rescued_count = substr($0, RSTART+8, RLENGTH-8) + 0;
         }
         if (match($0, /ignored=[0-9]+/)) {
-            ignored_count = substr($0, RSTART+8, RLENGTH-8);
+            ignored_count = substr($0, RSTART+8, RLENGTH-8) + 0;
         }
 
         # Determine the highest count
@@ -182,17 +193,23 @@ BEGIN {
 
         # Print the line with the determined color
         print color $0 nc;
-    } else if (in_green_block) {
+    }
+    # Handle green block (inside "ok" block)
+    else if (in_green_block) {
         print green $0 nc;
         if ($0 ~ /}$/) {
             in_green_block = 0;
         }
-    } else if (in_red_block) {
+    }
+    # Handle red block (inside "fatal" block)
+    else if (in_red_block) {
         print red $0 nc;
         if ($0 ~ /}$/) {
             in_red_block = 0;
         }
-    } else {
+    }
+    # Default case (print as-is)
+    else {
         print $0;
     }
 }
