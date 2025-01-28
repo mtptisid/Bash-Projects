@@ -49,7 +49,7 @@ This section retrieves the system uptime and displays it in a formatted manner.
 
 ```bash
 echo "+-------------------------------- Uptime --------------------------------+"
-echo "| `uptime` |"
+echo "|                                `uptime`                                |"
 echo "+------------------------------------------------------------------------+"
 ```
 
@@ -226,8 +226,12 @@ Overall swap used: 100.63 MB
 ![de05ced2-524e-4d77-b7bb-a3db98989bb0](https://github.com/user-attachments/assets/3560dc24-8384-458b-87b6-fd62a8588f50)
 
 
+---
+
 ![c5a5a31e-c102-4554-941a-34bca2e69a00](https://github.com/user-attachments/assets/7fa0fa63-d59f-4a5d-b990-17e73f749656)
 
+
+---
 
 ## Conclusion
 
