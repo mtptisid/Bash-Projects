@@ -84,6 +84,11 @@ Fri Jan 31 15:11:53 CET 2025
 +--------------------------+--------------+--------+------------------+-----------+-------------------------------------+---------------------------------+---------+
 ```
 
+**Screenshots**
+
+![image](https://github.com/user-attachments/assets/b1f136d8-1986-420b-b83b-4625f70781a3)
+
+
 **Command used:**
 ```
 echo "$server,$rhelver,$id,$dates,$actions,$kernel,$datesk,$suptime" >> $output_file
