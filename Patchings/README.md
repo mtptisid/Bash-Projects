@@ -1,4 +1,4 @@
-# checklastpatch Function Overview
+# Check Last Patch Function Overview
 
 ## Purpose
 The `checklastpatch` function is designed to collect important system and update-related information from a remote server. It uses SSH to connect to a specified server and gathers data regarding:
