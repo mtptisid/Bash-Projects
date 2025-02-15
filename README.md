@@ -13,7 +13,7 @@
 
 ---
 
-[RESOURCE USAGE SCRIPT](https://github.com/mtptisid/Bash-Projects/tree/master/RESOURCES)
+[RESOURCE USAGE SCRIPT](https://github.com/mtptisid/Bash-Projects/tree/master/RESOURCES) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white)
 
 
 ---
