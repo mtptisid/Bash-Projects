@@ -9,6 +9,9 @@
 
 ---
 
+## Check Out my Bash script listing Resource Usage of the Linux machine.
+
+---
 
 [RESOURCE USAGE SCRIPT](https://github.com/mtptisid/Bash-Projects/tree/master/RESOURCES)
 
