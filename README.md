@@ -10,3 +10,7 @@
 ---
 
 
+[RESOURCE USAGE SCRIPT](https://github.com/mtptisid/Bash-Projects/tree/master/RESOURCES)
+
+
+---
