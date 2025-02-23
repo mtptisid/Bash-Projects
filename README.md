@@ -22,7 +22,7 @@
 [PATCH FUNCTION OVERVIEW](https://github.com/mtptisid/Bash-Projects/tree/master/Patchings) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white)
 
 ---
-
+## Check Out my Bash script for Managing Swap in Linux Machine.
 
 [SWAP MANAGEMENT](https://github.com/mtptisid/Bash-Projects/blob/master/SWAP/README.md)![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white)
 
