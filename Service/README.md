@@ -18,7 +18,7 @@ This script deploys and manages a systemd service across multiple remote servers
 
 ## Usage
 
-'''
+```
 ./script_name <server|file>
   
 Where:
@@ -28,7 +28,7 @@ Where:
 Examples:
   ./deploy_service.sh 192.168.1.100
   ./deploy_service.sh server_list.txt
-'''
+```
 
 ## Functions
 
